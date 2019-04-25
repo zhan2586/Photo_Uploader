@@ -18,9 +18,18 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_select_clicked()
 {
-    QString dir = QFileDialog::getExistingDirectory(this, "Open a folder",
-                                                    "C://");
+    QString dir = QFileDialog::getExistingDirectory(this,
+                                                    "Open a folder",
+                                                    QDir::homePath());
     ui->statusBar->showMessage(dir + " is selected.");
 
+}
 
+void MainWindow::on_pushButton_copy_clicked()
+{
+    // int number = 15;
+    QString result = "Compressed done. You photographed 15 cars today!";
+    QMessageBox::information(this, "Result", result);
+
+    QApplication::quit();
 }

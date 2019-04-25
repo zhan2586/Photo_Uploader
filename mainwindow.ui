@@ -27,7 +27,7 @@
      <string>Select</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QPushButton" name="pushButton_copy">
     <property name="geometry">
      <rect>
       <x>220</x>
@@ -38,6 +38,12 @@
     </property>
     <property name="text">
      <string>Copy</string>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
     </property>
    </widget>
   </widget>
