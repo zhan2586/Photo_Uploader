@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QDir>
@@ -7,6 +8,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QDebug>
+#include <JlCompress.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -27,7 +29,6 @@ void createNewFolder(){
     QDate today = QDate::currentDate();
     QString newFolder = today.toString();
     QDir dir;
-    // destDir = dir.mkpath("E:/Dealership/" + newFolder);
     dir.mkpath("E:/Dealership/" + newFolder);
     destDir = "E:/Dealership/" + newFolder;
     qDebug() << "Destination folder is: " << destDir;
@@ -45,10 +46,7 @@ void copyPath(QString srcDir, QString destDir)
         copyPath(srcDir+ QDir::separator() + d, dst_path);
     }
 
-    foreach (QString file, dir.entryList(QDir::Files)) {
-        // QString srcItemPath = srcDir + "/" + f;
-        // QString dstItemPath = destDir + "/" + f;
-        //copyPath(srcDir+ QDir::separator() + d, dst_path);
+    foreach (QString file, dir.entryList(QDir::Files)) {       
         qDebug() << "Copy files from " << srcDir << " to " << destDir;
         QFile::copy(srcDir+ QDir::separator() + file, destDir+ QDir::separator() + file);
     }
@@ -64,10 +62,22 @@ void MainWindow::on_pushButton_select_clicked()
 
 }
 
+void compressDir(QString zipFile, QString destDir){
+    if(JlCompress::compressDir(zipFile, destDir)){
+        qDebug()<<"Created: " << zipFile;
+    }
+    else{
+        qDebug() << "Could not create: ";
+    }
+}
+
 void MainWindow::on_pushButton_copy_clicked()
 {
     createNewFolder();
     copyPath(srcDir, destDir);
+
+    QString zipFile = destDir + ".zip";
+    compressDir(zipFile, destDir);
 
     QMessageBox::information(this, "destination", destDir);
     QString result = "Compressed done. You photographed 15 cars today!";
