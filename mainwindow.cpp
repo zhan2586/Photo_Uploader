@@ -9,6 +9,7 @@
 #include <QTextStream>
 #include <QDebug>
 #include <JlCompress.h>
+#include <QDesktopServices>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -24,12 +25,15 @@ MainWindow::~MainWindow()
 
 QString srcDir;
 QString destDir;
+QString name = "Andy";
+QString link = "https://wetransfer.com";
+
+int carNumber;
 
 void createNewFolder(){
     QDate today = QDate::currentDate();
     QString newFolder = today.toString();
     QDir dir;
-    // destDir = dir.mkpath("E:/Dealership/" + newFolder);
     dir.mkpath("E:/Dealership/" + newFolder);
     destDir = "E:/Dealership/" + newFolder;
     qDebug() << "Destination folder is: " << destDir;
@@ -72,25 +76,39 @@ void compressDir(QString zipFile, QString destDir){
     }
 }
 
+void countNumber(){
+    QDir dir( destDir );
+    dir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
+    int photoNumber = dir.count();
+    carNumber = photoNumber / 24.0;
+    qDebug() << "There are " << photoNumber << " photos in detination folder.";
+
+    // round number to integer
+    //(int)number;
+    qDebug() << "There are " << carNumber << " cars in detination folder.";
+
+    // QString::number(carNumber) = carNumber;
+    // return number;
+}
+
 void MainWindow::on_pushButton_copy_clicked()
 {
     createNewFolder();
     copyPath(srcDir, destDir);
 
-    QString zipFile = destDir + ".zip";
+    QString zipFile = destDir + "_" + name + ".zip";
     compressDir(zipFile, destDir);
+    QString outputTip = "Compressed done as " + zipFile;
+    QMessageBox::information(this, "Target file", outputTip);
 
-    QMessageBox::information(this, "destination", destDir);
-    QString result = "Compressed done. You photographed 15 cars today!";
-    QMessageBox::information(this, "Result", result);
+    countNumber();
+    QString str1 = " cars today!";
+    QString resultTip = "You photographed " + QString::number(carNumber) + str1;
+    QMessageBox::information(this, "Result", resultTip);
 
+    QDesktopServices::openUrl(QUrl("file:///E:/Dealership",
+                                   QUrl::TolerantMode));
+    QDesktopServices::openUrl(QUrl(link));
     QApplication::quit();
 }
 
-/* carNumber(destDir){
-    int number = destDir.count() / 25;
-    qDebug() << "There are " << number << " photos in destDir.";
-    (int)number; // round number to integer
-
-    return number;
-}*/
