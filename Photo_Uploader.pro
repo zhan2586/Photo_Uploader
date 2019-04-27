@@ -18,3 +18,8 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h
 
 FORMS    += mainwindow.ui
+
+CMAKE_CXXFLAGS += -std=gnu++14
+INCLUDEPATH +="C:\Users\Wenyu\Downloads\Qt\ZipPack\include"
+LIBS += -L"C:\Users\Wenyu\Downloads\Qt\ZipPack\lib"
+LIBS += -lquazip -lz
