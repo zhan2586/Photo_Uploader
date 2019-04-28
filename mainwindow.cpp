@@ -10,6 +10,7 @@
 #include <QDebug>
 #include <JlCompress.h>
 #include <QDesktopServices>
+#include <QtMath>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -28,7 +29,7 @@ QString destDir;
 QString name = "Andy";
 QString link = "https://wetransfer.com";
 
-int carNumber;
+float carNumber;
 
 void createNewFolder(){
     QDate today = QDate::currentDate();
@@ -80,15 +81,21 @@ void countNumber(){
     QDir dir( destDir );
     dir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
     int photoNumber = dir.count();
-    carNumber = photoNumber / 24.0;
+    carNumber = photoNumber / 25.0;
     qDebug() << "There are " << photoNumber << " photos in detination folder.";
 
     // round number to integer
-    //(int)number;
+    int carNumberInt = qFloor(carNumber);
+    float carNumberDecimal = carNumber - carNumberInt;
+    qDebug() << "Integer part is " << carNumberInt;
+    qDebug() << "Decimal part is " << carNumberDecimal;
+    if (carNumberDecimal < 0.5){
+        carNumber = carNumberInt;
+    }
+    else{
+        carNumber = carNumberInt + 1;
+    }
     qDebug() << "There are " << carNumber << " cars in detination folder.";
-
-    // QString::number(carNumber) = carNumber;
-    // return number;
 }
 
 void MainWindow::on_pushButton_copy_clicked()
